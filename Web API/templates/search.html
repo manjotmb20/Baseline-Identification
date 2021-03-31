@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
+  <link rel="icon" href="http://obj-cache.cloud.ruanbekker.com/favicon.ico">
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+  <title>Baseline Search</title>
+
+</head>
+<body>
+
+  <div class="container">
+    <div style="background:transparent !important" class="jumbotron">
+      <div style="font-family: 'Pacifico', cursive;">
+        <p>
+          <center>
+          <font size="8">Baselines are all you need.. Search Yours Here</font>
+          </center>
+        </p>
+      </div>
+    </div>
+
+    <form action="/search/results" method="post">
+      <div class="input-group">
+        <input type="text" class="form-control input-lg" id="input" name="input" placeholder="Enter abstract or relevant details" autofocus >
+        <div class="input-group-btn">
+          <button class="btn btn-primary btn-lg" type="submit" onclick="save();">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+
+        </div>
+      </div>
+      <div>
+        <!-- <tr>
+          <td style="font-weight: bold; font-size: x-large;"><b style="font-size: x-large;">SORT BY:</b></td>  
+          <td ><input type="checkbox" id="norm" name="Relevance" style="margin-left: 50px;" onclick="ischeck();" >
+          <label for="norm" style="font-size: x-large;">Relevance</label></td>
+          
+          <td ><input type="checkbox" id="norm2" name="Relevance2" style="margin-left: 50px;" onclick="ischeck2();" >
+          <label for="norm" style="font-size: x-large;">Year</label> </td>
+          
+          <td ><input type="checkbox" id="norm2" name="Relevance3" style="margin-left: 50px;" onclick="ischeck3();" >
+            <label for="norm" style="font-size: x-large;">Citations</label> </td>
+          </tr>  -->
+          <label for="sort" style="font-weight: bold; font-size: x-large;">Sort By:</label>
+        <select name="sort" id="sort" >
+          <option value="Relevance" style="font-weight: bold; font-size: large;">Relevance</option>
+          <option value="Year" style="font-weight: bold; font-size: large;">Year</option>
+          <option value="Citations" style="font-weight: bold; font-size: large;">Citations</option>
+        </select>
+      </div>
+    </form>
+
+    <script>
+      function save(){
+      var inp=document.getElementById("input").value;
+      var inp2=document.getElementById("sort").value;
+      if (typeof(Storage) !== "undefined") {
+        localStorage.setItem("val",inp);
+        localStorage.setItem("val2",inp2);
+
+        console.log("done1");
+      } else {
+        console.log("! No Web Storage support..");
+      }
+      }
+    </script>
+<br>
+
+
+
+    <br><br>
+      
+
+      </div>
+    </div>
+  </body>
+</html>
