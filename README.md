@@ -27,7 +27,7 @@ Check for the configuration from the ```config.py``` file as per convinience.
 
 For running the configuration directly:
 ```javascript
-python final-baseline.py
+python final_baseline.py
 ```
 
 
