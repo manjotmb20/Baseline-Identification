@@ -10,18 +10,18 @@ Original file is located at
 import re
 
 import pickle
-context=pickle.load(open("/content/drive/MyDrive/Baseline/pickles_data/reduced_context.pkl",'rb'))
+context=pickle.load(open("Model/Data/reduced_context.pkl",'rb'))
 
 import pickle
-context2=pickle.load(open("/content/drive/MyDrive/Baseline/pickles_data/all_contexts.pkl",'rb'))
+context2=pickle.load(open("Model/Data/all_contexts.pkl",'rb'))
 
-location_feature = pickle.load(open("/content/drive/MyDrive/Baseline/pickles_data/location_feature.pkl","rb"))
-title_overlap = pickle.load(open("/content/drive/MyDrive/Baseline/pickles_data/title_overlap.pkl","rb"))
-popularity = pickle.load(open("/content/drive/MyDrive/Baseline/pickles_data/popularity_feat.pkl", "rb"))
-# paper_info = pickle.load(open("/updated/pickles/paper_info (1).pickle", "rb"))
-num_table = pickle.load(open("/content/drive/MyDrive/Baseline/pickles_data/num_tables.pkl","rb"))
-context_count = pickle.load(open("/content/drive/MyDrive/Baseline/pickles_data/context_count.pkl","rb"))
-weighted_cue = pickle.load(open("/content/drive/MyDrive/Baseline/pickles_data/weighted_cue_words.pkl", "rb"))
+location_feature = pickle.load(open("Model/Data/location_feature.pkl","rb"))
+title_overlap = pickle.load(open("Model/Data/title_overlap.pkl","rb"))
+popularity = pickle.load(open("Model/Data/popularity_feat.pkl", "rb"))
+# paper_info = pickle.load(open("Model/Data/paper_info (1).pickle", "rb"))
+num_table = pickle.load(open("Model/Data/num_tables.pkl","rb"))
+context_count = pickle.load(open("Model/Data/context_count.pkl","rb"))
+weighted_cue = pickle.load(open("Model/Data/weighted_cue_words.pkl", "rb"))
 
 output = []
 count = 0
