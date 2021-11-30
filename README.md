@@ -11,8 +11,8 @@ We release the dataset for the Baseline Classification task that consists of man
   |KEY           |          VALUE                                                                  |
   |--------------|---------------------------------------------------------------------------------|
   |TITLE         |   Title of the paper                                                            |
-  |ABSTRACT      |   Utterance text to classify                                                    |
-  |CONTEXT       |   Extracted mfcc features from audio file corresponding to the current utterance|
+  |ABSTRACT      |   Abstract of the paper                                                         |
+  |CONTEXT       |   Context of full information present in the paper                              |
   |Extra         |   Extra supplimentary information calculated from the context                   |
   |tag           |   Whether the given paper is considered a baseline or not                       |
   
@@ -27,7 +27,7 @@ Check for the configuration from the ```config.py``` file as per convinience.
 
 For running the configuration directly:
 ```javascript
-python Sarhum.py
+python final-baseline.py
 ```
 
 
