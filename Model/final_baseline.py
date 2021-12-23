@@ -9,6 +9,9 @@ Original file is located at
 
 import re
 
+
+// Loading different pickle files that contains different features extracted from the contextual data.
+
 import pickle
 context=pickle.load(open("Model/Data/reduced_context.pkl",'rb'))
 
@@ -82,6 +85,8 @@ tag=[]
 title=[]
 emb_text=[]
 
+// Appending the text from the context present in the paper to the title, data and tag field respectively.
+
 count=0
 for key in context.keys():
   for paper in context[key]:
@@ -145,11 +150,17 @@ from sklearn.metrics import (
     classification_report
 )
 
+
+// importing different libraries from transformers.
+
+
 from transformers import (
     AutoTokenizer, 
     AutoModel,
     get_linear_schedule_with_warmup
 )
+
+// Creating a dataframe with different fields.
 
 import pandas as pd
 df=pd.DataFrame()
@@ -163,6 +174,9 @@ df['tag']=tag
 for i in range(len(df)):
   df['ABSTRACT'][i]=df['TITLE'][i]+' '+df['ABSTRACT'][i]
 
+
+
+
 cont=[]
 c_len=[]
 for i in range(len(df)):
@@ -170,11 +184,17 @@ for i in range(len(df)):
   c_len.append(len(df['ABSTRACT'][i].split(". ")))
 df['cont']=cont
 
+// replacing Citations with the _citation_ keyword, which boosts the performance of the algorithm.
+
 for i in range(len(df)):
   df['ABSTRACT'][i]=re.sub(r'\([\da-z\wA-z\s,-/+|]*\s*[\da-z\wA-z\s,-/+|]*\s*\)*', '_citation_', df['ABSTRACT'][i])
 
+// replacing numbers with whitespaces.
+
 for i in range(len(df)):
   df['ABSTRACT'][i]=re.sub(r'[0-9]+', '', df['ABSTRACT'][i])
+
+// finalizing the dataframe.
 
 df=df[['TITLE','ABSTRACT','CONTEXT','Extra','cont','tag']]
 
@@ -182,6 +202,9 @@ df=df[['TITLE','ABSTRACT','CONTEXT','Extra','cont','tag']]
 # df2['text']=df['ABSTRACT'].to_list()
 
 import string
+
+
+// function to preprocess the dataframe to remove different conjunctionalitites from the data in order to clean the data.
 
 def preprocess(df):
     df.insert(1,'Processed Post', np.zeros(len(df),dtype=str))
@@ -216,8 +239,14 @@ df.drop(labels=['Processed Post'],axis=1,inplace=True)
 
 # df2.to_csv('baseline2.txt',header=False,index=False)
 
+
+// splitting dataframe into train and test data.
+
 test_df=df[44833:]
 train_df=df[:44833]
+
+
+
 
 def clean_text(text):
     # text = text.split()
@@ -227,6 +256,8 @@ def clean_text(text):
     # text = re.sub('([.,!?()])', r'  ', text)
     return text
     
+
+// function to return the text from the dataframe. 
 
 def get_texts(df):
     titles = df['TITLE'].apply(clean_text)
@@ -256,6 +287,9 @@ for t, a,c,e, l in zip(titles[:5], abstracts[:5],contexts[:5],extra[:5], labels[
     print(f'LABEL -\t{l}')
     print('_' * 80)
     print()
+
+    
+// config class for model with different parameters.
 
 class Config:
     def __init__(self):
@@ -287,6 +321,9 @@ class Config:
 
 config = Config()
 
+
+// Custom Attention class used for the neural network.
+
 class Attention(nn.Module):
     def __init__(self, hidden_dim, seq_len):
         super(Attention, self).__init__()
@@ -305,6 +342,9 @@ class Attention(nn.Module):
         # 3. Braodcasting and out
         s = (inp * torch.unsqueeze(a, 2)).sum(1)
         return a, s
+
+    
+// Custom class to transform the dataframe into a custom dataset type.
 
 class TransformerDataset(Dataset):
     def __init__(self, df, indices, set_type=None):
@@ -421,7 +461,12 @@ class TransformerDataset(Dataset):
 
         }
 
+    
+    
+    
 np.random.seed(config.SEED)
+
+// len of the training dataframe.
 
 dataset_size = len(train_df)
 indices = list(range(dataset_size))
@@ -432,6 +477,9 @@ train_indices, val_indices = indices[split:], indices[:split]
 
 train_data = TransformerDataset(train_df, train_indices)
 val_data = TransformerDataset(train_df, val_indices)
+
+
+// Custom class to implement the SelfAttention functionality for our neural network.
 
 class SelfAttention(nn.Module):
     def __init__(self, attention_size, batch_first=False, non_linearity="tanh"):
@@ -494,6 +542,10 @@ class SelfAttention(nn.Module):
 
         return representations, scores
 
+    
+
+// dataloader for the training and validation data.    
+    
 train_dataloader = DataLoader(train_data, batch_size=config.BATCH_SIZE)
 val_dataloader = DataLoader(val_data, batch_size=config.BATCH_SIZE)
 
@@ -507,6 +559,9 @@ for k, v in b.items():
     else:
         print(f'{k} shape: {v.shape}')
 
+        
+// WeightDrop to change the weights during the model training phase.        
+        
 class WeightDrop(nn.Module):
     def __init__(self, module, weights, dropout=0, variational=False):
         super(WeightDrop, self).__init__()
@@ -542,6 +597,9 @@ class WeightDrop(nn.Module):
         self._setweights()
         return self.module.forward(*args)
 
+    
+// LockedDropout class for setting the dropout parameter during the model building phase.
+
 class LockedDropout(nn.Module):
     def __init__(self):
         super().__init__()
@@ -553,6 +611,9 @@ class LockedDropout(nn.Module):
           1 - dropout) / (1 - dropout)
         mask = mask.expand_as(x)
         return mask * x
+
+    
+// Attention class with the context of the paper.
 
 class AttentionWithContext(nn.Module):
     def __init__(self, hidden_dim):
@@ -566,6 +627,9 @@ class AttentionWithContext(nn.Module):
         a = F.softmax(self.contx(u), dim=1)
         s = (a * inp).sum(1)
         return a.permute(0, 2, 1), s
+
+    
+// WordAttnNet class to give attention to the words in a sentence.
 
 class WordAttnNet(nn.Module):
     def __init__(self, vocab_size=320, hidden_dim=768, padding_idx=1, embed_dim=768, 
@@ -603,6 +667,8 @@ class WordAttnNet(nn.Module):
         # print(a.shape)
         # print(s.shape)
         return a, s.unsqueeze(1), h_n
+
+// Sentence attention class.
 
 class SentAttnNet(nn.Module):
     def __init__(self, word_hidden_dim=768, sent_hidden_dim=384, padding_idx=1, 
