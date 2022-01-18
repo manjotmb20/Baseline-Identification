@@ -37,6 +37,7 @@ python final_baseline.py
 ## Code Running Sequence
 
 Line 1- 37 : Loading different pickle files that contains different features extracted from the contextual data.
+
 Line 28 - 81 : Preprocessing the loaded data files.
 Line 88 - 97 : Appending the text from the context present in the paper to the title, data and tag field respectively.
 Line 100 - 127 : Converting the loaded list files to dataframe.
