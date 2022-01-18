@@ -25,6 +25,9 @@ We further propose a neural attention based model architecture to classify refer
 
 Check for the configuration from the ```config.py``` file as per convinience.
 
+There are some files in the Data directory that need to be unzipped in order to have the original data files.
+This is because of the big size of the file structure which is not supported by Github.
+
 For running the configuration directly:
 ```javascript
 python final_baseline.py
