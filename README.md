@@ -48,6 +48,10 @@ Line 133- 200 : Basic data cleaning and preprocessing steps.
 
 Line 232 - 289: Creating a new transformer dataset to be passed to the transformer model.
 
+Line 289 - 341: Creating a customized attention functionality to be applied in the model.
+
+Line 341 - 441: Training the deep learning neural network to learn the context for the papers and classify them based on the attention function defined.
+
 
 
 ## Web Tool
